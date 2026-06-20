@@ -169,70 +169,6 @@ nav a:hover {
     gap: 30px;
 }
 
-.product-card {
-    background: #0a0a0a;
-    border: 1px solid #1A1A1A;
-    overflow: hidden;
-    transition: transform 0.3s, border-color 0.3s;
-    cursor: pointer;
-}
-
-.product-card:hover {
-    transform: translateY(-5px);
-    border-color: #FF2200;
-}
-
-.product-image {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-    background: #111;
-}
-
-.product-info {
-    padding: 25px;
-}
-
-.product-name {
-    font-family: 'Bebas Neue', cursive;
-    font-size: 28px;
-    letter-spacing: 3px;
-    margin-bottom: 10px;
-}
-
-.product-price {
-    font-size: 18px;
-    font-weight: 700;
-    color: #FF2200;
-    margin-bottom: 15px;
-}
-
-.product-description {
-    font-size: 13px;
-    color: #999;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-.add-to-cart {
-    width: 100%;
-    padding: 14px;
-    background: #F5F0EB;
-    color: #000;
-    border: none;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.add-to-cart:hover {
-    background: #FF2200;
-    color: #fff;
-}
-
 /* ========== ABOUT SECTION ========== */
 .about-section {
     background: #0a0a0a;
@@ -305,7 +241,7 @@ footer {
     font-size: 12px;
 }
 
-/* ========== CART MODAL ========== */
+/* ========== CART SIDEBAR ========== */
 .cart-overlay {
     position: fixed;
     top: 0;
@@ -340,32 +276,6 @@ footer {
     color: #fff;
     font-size: 24px;
     cursor: pointer;
-}
-
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 0;
-    border-bottom: 1px solid #1A1A1A;
-}
-
-.cart-item-name {
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.cart-item-price {
-    color: #FF2200;
-    font-weight: 700;
-}
-
-.remove-item {
-    background: none;
-    border: none;
-    color: #FF2200;
-    cursor: pointer;
-    font-size: 18px;
 }
 
 .cart-total {
