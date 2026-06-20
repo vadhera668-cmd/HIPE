@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HYPE — Streetwear Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ANNOUNCEMENT BAR -->
+    <div class="announcement-bar">
+        <p>FREE SHIPPING ON ORDERS ABOVE ₹1999 • NEW DROP EVERY FRIDAY</p>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">H<span>Y</span>PE</a>
+            <nav>
+                <a href="#shop">SHOP</a>
+                <a href="#about">CULTURE</a>
+                <a href="#contact">CONTACT</a>
+                <button class="cart-btn" onclick="viewCart()">CART (<span id="cart-count">0</span>)</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">WEAR THE HYPE</h1>
+            <p class="hero-subtitle">LIVE THE CULTURE</p>
+            <a href="#shop" class="cta-btn">SHOP THE DROP ↓</a>
+        </div>
+        <div class="hero-bg-text">HYPE</div>
+    </section>
+
+    <!-- PRODUCT GRID -->
+    <section id="shop" class="shop-section">
+        <h2 class="section-title">LATEST DROP</h2>
+        <div class="product-grid" id="product-grid">
+            <!-- Products load here from Supabase -->
+            <p style="color: #999; text-align: center; width: 100%;">Loading products...</p>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="about-section">
+        <div class="about-content">
+            <h2>CULTURE OVER CLOTHING</h2>
+            <p>HYPE isn't just a brand. It's a movement. Every piece is a limited drop — once it's gone, it's gone forever. No restocks. No mass production. Just pure streetwear energy.</p>
+            <p class="about-tag">EST. 2024 • INDIA</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">HYPE</div>
+            <div class="footer-links">
+                <a href="#">Instagram</a>
+                <a href="#">Twitter</a>
+                <a href="#contact">Contact</a>
+                <a href="#">Privacy</a>
+            </div>
+            <p class="footer-copy">© 2024 HYPE. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- CART MODAL -->
+    <div class="cart-overlay" id="cart-overlay" style="display: none;">
+        <div class="cart-modal">
+            <button class="close-cart" onclick="closeCart()">✕</button>
+            <h2>YOUR CART</h2>
+            <div id="cart-items">
+                <p style="color: #999;">Cart is empty</p>
+            </div>
+            <div class="cart-total" id="cart-total" style="display: none;">
+                <h3>Total: ₹<span id="total-amount">0</span></h3>
+                <button class="checkout-btn" onclick="checkout()">CHECKOUT WITH RAZORPAY</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase & Razorpay Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
