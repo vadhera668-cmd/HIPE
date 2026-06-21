@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HIPE ADMIN</title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #000;
             color: #fff;
@@ -13,7 +14,6 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
             padding: 20px;
         }
         .admin-box {
@@ -38,7 +38,6 @@
             border: 1px solid #333;
             color: #fff;
             font-size: 14px;
-            box-sizing: border-box;
         }
         button {
             width: 100%;
@@ -64,7 +63,7 @@
         
         <div id="login-section">
             <input type="password" id="pass" placeholder="Enter Password">
-            <button onclick="login()">UNLOCK</button>
+            <button id="login-btn">UNLOCK</button>
             <p id="error-msg"></p>
         </div>
 
@@ -73,13 +72,81 @@
             <input type="number" id="price" placeholder="Price (₹)">
             <textarea id="desc" placeholder="Description" rows="3"></textarea>
             <input type="text" id="image" placeholder="Image URL">
-            <button onclick="uploadProduct()">UPLOAD PRODUCT</button>
+            <button id="upload-btn">UPLOAD PRODUCT</button>
             <p id="status"></p>
-            <button class="logout-btn" onclick="logout()">LOCK PANEL</button>
+            <button class="logout-btn" id="logout-btn">LOCK PANEL</button>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="admin.js"></script>
+    <script>
+        // Supabase setup
+        const SUPABASE_URL = 'https://ozumnakvrhxqiliblavd.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96dW1uYWt2cmh4cWlsaWJsYXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MTQ3OTEsImV4cCI6MjA5NzQ5MDc5MX0.GntM_Pawq9PkZrV0iZYJF6tZ3pnAdvTMqYCgob_moD8';
+        const ADMIN_PASSWORD = '6688';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Wait for page to load
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Login button
+            document.getElementById('login-btn').addEventListener('click', function() {
+                var pass = document.getElementById('pass').value;
+                if (pass === ADMIN_PASSWORD) {
+                    document.getElementById('login-section').style.display = 'none';
+                    document.getElementById('panel').style.display = 'block';
+                    document.getElementById('error-msg').textContent = '';
+                } else {
+                    document.getElementById('error-msg').textContent = '❌ Wrong password!';
+                }
+            });
+
+            // Logout button
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                document.getElementById('login-section').style.display = 'block';
+                document.getElementById('panel').style.display = 'none';
+                document.getElementById('pass').value = '';
+                document.getElementById('error-msg').textContent = '';
+                document.getElementById('status').textContent = '';
+            });
+
+            // Upload button
+            document.getElementById('upload-btn').addEventListener('click', async function() {
+                var name = document.getElementById('name').value;
+                var price = document.getElementById('price').value;
+                var description = document.getElementById('desc').value;
+                var image_url = document.getElementById('image').value;
+                var status = document.getElementById('status');
+
+                if (!name || !price || !image_url) {
+                    status.textContent = '❌ Please fill all fields';
+                    status.style.color = 'red';
+                    return;
+                }
+
+                var { error } = await supabase
+                    .from('products')
+                    .insert([{ 
+                        name: name, 
+                        price: parseFloat(price), 
+                        description: description, 
+                        image_url: image_url 
+                    }]);
+
+                if (error) {
+                    status.textContent = '❌ Error: ' + error.message;
+                    status.style.color = 'red';
+                } else {
+                    status.textContent = '✅ Product added!';
+                    status.style.color = 'green';
+                    document.getElementById('name').value = '';
+                    document.getElementById('price').value = '';
+                    document.getElementById('desc').value = '';
+                    document.getElementById('image').value = '';
+                }
+            });
+
+        });
+    </script>
 </body>
 </html>
