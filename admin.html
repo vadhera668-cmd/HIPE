@@ -49,104 +49,63 @@
             font-weight: bold;
             cursor: pointer;
             letter-spacing: 2px;
-            margin-bottom: 10px;
         }
         button:hover { background: #cc1b00; }
-        #error-msg { color: red; text-align: center; margin-top: 10px; }
         #status { text-align: center; margin-top: 10px; font-weight: bold; }
-        .logout-btn { background: #333; }
     </style>
 </head>
 <body>
     <div class="admin-box">
         <h1>H<span>I</span>PE ADMIN</h1>
-        
-        <div id="login-section">
-            <input type="password" id="pass" placeholder="Enter Password">
-            <button id="login-btn">UNLOCK</button>
-            <p id="error-msg"></p>
-        </div>
 
-        <div id="panel" style="display:none;">
-            <input type="text" id="name" placeholder="Product Name">
-            <input type="number" id="price" placeholder="Price (₹)">
-            <textarea id="desc" placeholder="Description" rows="3"></textarea>
-            <input type="text" id="image" placeholder="Image URL">
-            <button id="upload-btn">UPLOAD PRODUCT</button>
-            <p id="status"></p>
-            <button class="logout-btn" id="logout-btn">LOCK PANEL</button>
-        </div>
+        <input type="text" id="name" placeholder="Product Name">
+        <input type="number" id="price" placeholder="Price (₹)">
+        <textarea id="desc" placeholder="Description" rows="3"></textarea>
+        <input type="text" id="image" placeholder="Image URL">
+        <button onclick="uploadProduct()">UPLOAD PRODUCT</button>
+        <p id="status"></p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Supabase setup
         const SUPABASE_URL = 'https://ozumnakvrhxqiliblavd.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96dW1uYWt2cmh4cWlsaWJsYXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MTQ3OTEsImV4cCI6MjA5NzQ5MDc5MX0.GntM_Pawq9PkZrV0iZYJF6tZ3pnAdvTMqYCgob_moD8';
-        const ADMIN_PASSWORD = '6688';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Wait for page to load
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // Login button
-            document.getElementById('login-btn').addEventListener('click', function() {
-                var pass = document.getElementById('pass').value;
-                if (pass === ADMIN_PASSWORD) {
-                    document.getElementById('login-section').style.display = 'none';
-                    document.getElementById('panel').style.display = 'block';
-                    document.getElementById('error-msg').textContent = '';
-                } else {
-                    document.getElementById('error-msg').textContent = '❌ Wrong password!';
-                }
-            });
+        async function uploadProduct() {
+            var name = document.getElementById('name').value;
+            var price = document.getElementById('price').value;
+            var description = document.getElementById('desc').value;
+            var image_url = document.getElementById('image').value;
+            var status = document.getElementById('status');
 
-            // Logout button
-            document.getElementById('logout-btn').addEventListener('click', function() {
-                document.getElementById('login-section').style.display = 'block';
-                document.getElementById('panel').style.display = 'none';
-                document.getElementById('pass').value = '';
-                document.getElementById('error-msg').textContent = '';
-                document.getElementById('status').textContent = '';
-            });
+            if (!name || !price || !image_url) {
+                status.textContent = '❌ Please fill all fields';
+                status.style.color = 'red';
+                return;
+            }
 
-            // Upload button
-            document.getElementById('upload-btn').addEventListener('click', async function() {
-                var name = document.getElementById('name').value;
-                var price = document.getElementById('price').value;
-                var description = document.getElementById('desc').value;
-                var image_url = document.getElementById('image').value;
-                var status = document.getElementById('status');
+            var { error } = await supabase
+                .from('products')
+                .insert([{ 
+                    name: name, 
+                    price: parseFloat(price), 
+                    description: description, 
+                    image_url: image_url 
+                }]);
 
-                if (!name || !price || !image_url) {
-                    status.textContent = '❌ Please fill all fields';
-                    status.style.color = 'red';
-                    return;
-                }
-
-                var { error } = await supabase
-                    .from('products')
-                    .insert([{ 
-                        name: name, 
-                        price: parseFloat(price), 
-                        description: description, 
-                        image_url: image_url 
-                    }]);
-
-                if (error) {
-                    status.textContent = '❌ Error: ' + error.message;
-                    status.style.color = 'red';
-                } else {
-                    status.textContent = '✅ Product added!';
-                    status.style.color = 'green';
-                    document.getElementById('name').value = '';
-                    document.getElementById('price').value = '';
-                    document.getElementById('desc').value = '';
-                    document.getElementById('image').value = '';
-                }
-            });
-
-        });
+            if (error) {
+                status.textContent = '❌ Error: ' + error.message;
+                status.style.color = 'red';
+            } else {
+                status.textContent = '✅ Product added!';
+                status.style.color = 'green';
+                document.getElementById('name').value = '';
+                document.getElementById('price').value = '';
+                document.getElementById('desc').value = '';
+                document.getElementById('image').value = '';
+            }
+        }
     </script>
 </body>
 </html>
