@@ -1,0 +1,15 @@
+{
+    "name": "HYPE - Streetwear Store",
+    "short_name": "HYPE",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#FF2200",
+    "icons": [
+        {
+            "src": "https://your-site.netlify.app/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
