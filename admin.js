@@ -3,7 +3,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Change this to YOUR secret password
-const ADMIN_PASSWORD = 'hype2024secret';
+const ADMIN_PASSWORD = '6688';
 
 let isLoggedIn = false;
 
