@@ -1,63 +1,58 @@
 const SUPABASE_URL = 'https://ozumnakvrhxqiliblavd.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96dW1uYWt2cmh4cWlsaWJsYXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MTQ3OTEsImV4cCI6MjA5NzQ5MDc5MX0.GntM_Pawq9PkZrV0iZYJF6tZ3pnAdvTMqYCgob_moD8';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// Change this to YOUR secret password
 const ADMIN_PASSWORD = '6688';
 
-let isLoggedIn = false;
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 function login() {
-    const password = document.getElementById('admin-password').value;
-    if (password === ADMIN_PASSWORD) {
-        isLoggedIn = true;
+    var pass = document.getElementById('pass').value;
+    if (pass === ADMIN_PASSWORD) {
         document.getElementById('login-section').style.display = 'none';
-        document.getElementById('upload-section').style.display = 'block';
-        document.getElementById('login-status').textContent = '';
+        document.getElementById('panel').style.display = 'block';
+        document.getElementById('error-msg').textContent = '';
     } else {
-        document.getElementById('login-status').textContent = '❌ Wrong password!';
-        document.getElementById('login-status').style.color = '#FF2200';
+        document.getElementById('error-msg').textContent = 'Wrong password!';
     }
 }
 
 function logout() {
-    isLoggedIn = false;
     document.getElementById('login-section').style.display = 'block';
-    document.getElementById('upload-section').style.display = 'none';
-    document.getElementById('admin-password').value = '';
+    document.getElementById('panel').style.display = 'none';
+    document.getElementById('pass').value = '';
+    document.getElementById('error-msg').textContent = '';
 }
 
 async function uploadProduct() {
-    if (!isLoggedIn) {
-        document.getElementById('status').textContent = '❌ Please login first';
-        return;
-    }
-
-    const name = document.getElementById('product-name').value;
-    const price = parseFloat(document.getElementById('product-price').value);
-    const description = document.getElementById('product-description').value;
-    const image_url = document.getElementById('product-image').value;
+    var name = document.getElementById('name').value;
+    var price = document.getElementById('price').value;
+    var description = document.getElementById('desc').value;
+    var image_url = document.getElementById('image').value;
+    var status = document.getElementById('status');
 
     if (!name || !price || !image_url) {
-        document.getElementById('status').textContent = '❌ Fill all required fields';
-        document.getElementById('status').className = 'error';
+        status.textContent = 'Please fill all fields';
+        status.style.color = 'red';
         return;
     }
 
-    const { error } = await supabase
+    var { error } = await supabase
         .from('products')
-        .insert([{ name, price, description, image_url }]);
+        .insert([{ 
+            name: name, 
+            price: parseFloat(price), 
+            description: description, 
+            image_url: image_url 
+        }]);
 
     if (error) {
-        document.getElementById('status').textContent = '❌ Error: ' + error.message;
-        document.getElementById('status').className = 'error';
+        status.textContent = 'Error: ' + error.message;
+        status.style.color = 'red';
     } else {
-        document.getElementById('status').textContent = '✅ Product uploaded successfully!';
-        document.getElementById('status').className = 'success';
-        // Clear form
-        document.getElementById('product-name').value = '';
-        document.getElementById('product-price').value = '';
-        document.getElementById('product-description').value = '';
-        document.getElementById('product-image').value = '';
+        status.textContent = 'Product added successfully!';
+        status.style.color = 'green';
+        document.getElementById('name').value = '';
+        document.getElementById('price').value = '';
+        document.getElementById('desc').value = '';
+        document.getElementById('image').value = '';
     }
 }
