@@ -1,43 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HIPE ADMIN</title>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{background:#000;color:#fff;font-family:'Inter',sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;}
-        .admin-box{background:#111;border:1px solid #222;padding:40px;max-width:500px;width:100%;}
-        h1{font-size:48px;letter-spacing:10px;margin-bottom:30px;}
-        h1 span{color:#FF2200;}
-        input,textarea{width:100%;padding:14px;background:#000;border:1px solid #333;color:#fff;margin-bottom:15px;font-size:14px;}
-        button{width:100%;padding:16px;background:#FF2200;color:#fff;border:none;font-weight:700;font-size:14px;cursor:pointer;letter-spacing:2px;}
-        button:hover{background:#cc1b00;}
-        #status{margin-top:15px;text-align:center;font-weight:600;}
-        #login-section{margin-bottom:20px;}
-    </style>
-</head>
-<body>
-    <div class="admin-box">
-        <h1>H<span>I</span>PE ADMIN</h1>
-        
-        <div id="login-section">
-            <input type="password" id="pass" placeholder="Admin Password">
-            <button onclick="login()">UNLOCK</button>
-        </div>
+const SUPABASE_URL = 'https://ozumnakvrhxqiliblavd.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96dW1uYWt2cmh4cWlsaWJsYXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MTQ3OTEsImV4cCI6MjA5NzQ5MDc5MX0.GntM_Pawq9PkZrV0iZYJF6tZ3pnAdvTMqYCgob_moD8';
+const ADMIN_PASSWORD = '6688';
 
-        <div id="panel" style="display:none;">
-            <input type="text" id="name" placeholder="Product Name">
-            <input type="number" id="price" placeholder="Price (₹)">
-            <textarea id="desc" placeholder="Description (optional)" rows="3"></textarea>
-            <input type="text" id="image" placeholder="Image URL">
-            <button onclick="uploadProduct()">UPLOAD PRODUCT</button>
-            <p id="status"></p>
-            <button onclick="logout()" style="background:#333;margin-top:10px;">LOCK</button>
-        </div>
-    </div>
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="admin.js"></script>
-</body>
-</html>
+function login() {
+    const pass = document.getElementById('pass').value;
+    if (pass === ADMIN_PASSWORD) {
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('panel').style.display = 'block';
+    } else {
+        alert('Wrong password!');
+    }
+}
+
+function logout() {
+    document.getElementById('login-section').style.display = 'block';
+    document.getElementById('panel').style.display = 'none';
+    document.getElementById('pass').value = '';
+}
+
+async function uploadProduct() {
+    const name = document.getElementById('name').value;
+    const price = parseFloat(document.getElementById('price').value);
+    const description = document.getElementById('desc').value;
+    const image_url = document.getElementById('image').value;
+    const status = document.getElementById('status');
+
+    if (!name || !price || !image_url) {
+        status.textContent = '❌ Fill all required fields';
+        status.style.color = '#FF2200';
+        return;
+    }
+
+    const { error } = await supabase
+        .from('products')
+        .insert([{ name, price, description, image_url }]);
+
+    if (error) {
+        status.textContent = '❌ Error: ' + error.message;
+        status.style.color = '#FF2200';
+    } else {
+        status.textContent = '✅ Product uploaded!';
+        status.style.color = '#00ff88';
+        document.getElementById('name').value = '';
+        document.getElementById('price').value = '';
+        document.getElementById('desc').value = '';
+        document.getElementById('image').value = '';
+    }
+}
